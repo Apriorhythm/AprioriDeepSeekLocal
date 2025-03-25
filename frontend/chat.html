@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 聊天</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+    <div class="w-full max-w-2xl bg-white shadow-lg rounded-lg p-6">
+        <h1 class="text-2xl font-semibold text-center text-gray-800 mb-4">DeepSeek-r1:7b</h1>
+        <div id="chat-box" class="h-96 overflow-y-auto border rounded-lg p-4 bg-gray-50 space-y-3">
+            <p class="text-gray-500 text-sm text-center">开始聊天吧！</p>
+        </div>
+        <div class="mt-4 flex">
+            <input id="user-input" type="text" placeholder="输入你的消息..."
+                class="flex-1 p-2 border rounded-l-lg focus:outline-none">
+            <button id="send-btn" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600">发送</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("send-btn").addEventListener("click", sendMessage);
+        document.getElementById("user-input").addEventListener("keypress", function (event) {
+            if (event.key === "Enter") sendMessage();
+        });
+
+        function sendMessage() {
+            const userInput = document.getElementById("user-input");
+            const message = userInput.value.trim();
+            if (message === "") return;
+
+            const chatBox = document.getElementById("chat-box");
+
+            // 显示用户消息
+            chatBox.innerHTML += `<div class="text-right"><span class="bg-blue-500 text-white px-3 py-1 rounded-lg inline-block">${message}</span></div>`;
+
+            userInput.value = "";
+
+            fetch("http://localhost:8086/ai/ollama/ds/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chatId: "user123", text: message })
+            })
+                .then(response => response.text())
+                .then(data => {
+                    // 解析 Markdown
+                    const markdownContent = marked.parse(data);
+
+                    chatBox.innerHTML += `<div class="text-left bg-gray-200 p-3 rounded-lg"><div class="prose">${markdownContent}</div></div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    chatBox.innerHTML += `<div class="text-left text-red-500">⚠️ 发生错误！</div>`;
+                    console.error("Error:", error);
+                });
+        }
+    </script>
+</body>
+
+</html>

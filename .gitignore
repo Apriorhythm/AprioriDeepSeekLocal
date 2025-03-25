@@ -1,0 +1,68 @@
+# === 1. IDEA 配置文件（不提交 IDE 个人设置） ===
+.idea/
+*.iml
+*.iws
+
+# === 2. Java 编译文件 ===
+/out/
+/bin/
+/target/
+/build/
+
+# === 3. 依赖库（Maven / Gradle） ===
+.mvn/
+.gradle/
+log/
+**/logs/
+!keep-logs.txt  # 如果需要保留某个日志文件，可用 `!` 例外处理
+**/*.log
+**/*.lock
+
+# === 4. 操作系统相关 ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# === 5. 运行时文件 ===
+*.pid
+*.seed
+*.dump
+
+# === 6. 环境配置（安全文件，不要上传到 Git） ===
+.env
+*.env
+application.yml
+application.properties
+config/
+secret/
+credentials.json
+
+# === 7. Redis / Database 数据文件（避免提交数据库缓存） ===
+dump.rdb
+*.db
+*.sqlite
+*.sql
+
+# === 8. Docker 相关文件（可选） ===
+/docker/data/
+/docker-compose.override.yml
+
+# === 9. Node.js 相关（如果有前端） ===
+/node_modules/
+/dist/
+package-lock.json
+yarn.lock
+
+# === 10. Java 开发临时文件 ===
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.gz
+
+# === 11. Lombok 自动生成的 `@Getter @Setter` 文件（可选） ===
+*.lombok
+
